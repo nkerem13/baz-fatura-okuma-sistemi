@@ -860,8 +860,19 @@ async function processQueue() {
 // OCR.SPACE API
 // ════════════════════════════════════════════════════
 async function callOCRSpace(base64Image) {
-    // BURAYA KENDİ API ANAHTARINIZI YAZMAYI UNUTMAYIN
-    const apiKey = "AQ.Ab8RN6K4njz0QBIHwFNdxfaDcplGVSHlKep3Bwv0GBWLOIAtjg";
+let API_KEY = localStorage.getItem('gemini_api_key');
+
+if (!API_KEY || API_KEY === "null" || API_KEY === "") {
+    API_KEY = prompt("Lütfen Google Gemini API Anahtarınızı girin:\n(Bu şifre sadece telefonunuzun güvenli hafızasına kaydedilecek, internete sızmayacaktır.)");
+    
+    if (API_KEY && API_KEY.trim() !== "") {
+        localStorage.setItem('gemini_api_key', API_KEY.trim());
+        alert("Anahtar başarıyla telefona kaydedildi! Artık faturaları okutabilirsiniz.");
+    } else {
+        alert("API Anahtarı girilmedi! Sistem çalışmayacaktır. Sayfayı yenileyip tekrar deneyin.");
+    }
+}
+// ===================================
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const cleanBase64 = base64Image.replace(/^data:image\/[a-z]+;base64,/, "");
